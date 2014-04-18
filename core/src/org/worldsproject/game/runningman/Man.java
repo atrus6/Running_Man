@@ -6,14 +6,28 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Created by atrus on 4/17/14.
  */
 public class Man {
+    //Here are our 4 images that the player is composed of.
     TextureRegion standing;
     TextureRegion running_1;
     TextureRegion running_2;
     TextureRegion running_3;
 
+    //How often the frame changes
     private float next_change = .1f;
     private float current = 0f;
     private TextureRegion current_frame;
+
+    //Status of the character
+    private boolean running = false;
+    private boolean jumping = false;
+
+    //Some starting values for the character.
+    private float x = 32;
+    private float y = 64;
+
+    //Some attributes to handle jumping.
+    private boolean going_up = false;
+    private float max_y = 200;
 
     public Man(TextureRegion man, TextureRegion r1, TextureRegion r2, TextureRegion r3) {
         standing = man;
@@ -36,6 +50,23 @@ public class Man {
             current = 0;
         }
 
+        if(jumping) {
+            if(going_up) {
+                y += 5;
+
+                if(y > max_y) {
+                    going_up = false;
+                }
+            } else {
+                y -= 5;
+
+                if(y < 64) {
+                    y = 64;
+                    jumping = false;
+                }
+            }
+        }
+
         return current_frame;
     }
 
@@ -47,5 +78,28 @@ public class Man {
         } else {
             current_frame = running_1;
         }
+    }
+
+    public void jump() {
+        if(!jumping) {
+            jumping = true;
+            going_up = true;
+        }
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
     }
 }
