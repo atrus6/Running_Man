@@ -36,7 +36,17 @@ public class GameScreen implements Screen {
 
     //Determines if we need to create a new row.
     private boolean new_row = false;
+
+    //Current running status of character.
+    //Used to have the character scroll in.
     private boolean running = false;
+
+    //Keeps track of the total time that's been played.
+    private float total_time;
+
+    //Keeps track of when we should start adding obstacles.
+    private float time_to_next_obstacle = 1f;
+    private float obstacle_timer = 0f;
 
     public GameScreen(final RunningMan game) {
         this.game = game;
@@ -116,21 +126,65 @@ public class GameScreen implements Screen {
         if(Gdx.input.isTouched() && running) {
             man.jump();
         }
+
+        total_time += delta;
+        obstacle_timer += delta;
     }
 
     private void createNewLine(float location) {
-        Sprite a = new Sprite(brick);
-        a.setX(location);
-        a.setY(64 * 5);
+        Sprite ceiling = new Sprite(brick);
+        ceiling.setX(location);
+        ceiling.setY(64 * 5);
 
 
-        Sprite b = new Sprite(brick);
-        b.setX(location);
-        b.setY(0);
+        Sprite floor = new Sprite(brick);
+        floor.setX(location);
+        floor.setY(0);
 
-        platform.add(a);
-        platform.add(b);
+        if(total_time > 10 && obstacle_timer > time_to_next_obstacle) {
+            obstacle_timer = 0f;
 
+            //Four types of obstacles
+            // 0: Spike on floor.
+            // 1: Spike on ceiling.
+            // 2: Spike on ceiling and water instead of floor.
+            // 3: Water instead of floor.
+            int type_of_obstacle = random.nextInt(4);
+
+            switch (type_of_obstacle) {
+                case 0:
+                    Sprite s0 = new Sprite(spike);
+                    s0.setX(location);
+                    s0.setY(64*1);
+                    platform.add(s0);
+                    break;
+                case 1:
+                    Sprite s1 = new Sprite(spike);
+                    s1.flip(false, true);
+                    s1.setX(location);
+                    s1.setY(64*4);
+                    platform.add(s1);
+                    break;
+                case 2:
+                    Sprite s2a = new Sprite(spike);
+                    s2a.flip(false, true);
+                    s2a.setX(location);
+                    s2a.setY(64*4);
+                    platform.add(s2a);
+
+                    floor = new Sprite(water);
+                    floor.setX(location);
+                    floor.setY(0);
+                    break;
+                case 3:
+                    floor = new Sprite(water);
+                    floor.setX(location);
+                    floor.setY(0);
+            }
+        }
+
+        platform.add(ceiling);
+        platform.add(floor);
         new_row = false;
     }
 
