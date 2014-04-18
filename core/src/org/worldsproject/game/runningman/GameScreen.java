@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
 
     private Man man;
 
+    //Determines if we need to create a new row.
     private boolean new_row = false;
     private boolean running = false;
 
@@ -112,7 +113,7 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
 
-        if(Gdx.input.isTouched()) {
+        if(Gdx.input.isTouched() && running) {
             man.jump();
         }
     }
