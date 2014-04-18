@@ -1,6 +1,7 @@
 package org.worldsproject.game.runningman;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Created by atrus on 4/17/14.
@@ -18,7 +19,6 @@ public class Man {
     private TextureRegion current_frame;
 
     //Status of the character
-    private boolean running = false;
     private boolean jumping = false;
 
     //Some starting values for the character.
@@ -28,6 +28,9 @@ public class Man {
     //Some attributes to handle jumping.
     private boolean going_up = false;
     private float max_y = 200;
+
+    //Our collision rectangle for the character.
+    private Rectangle collision = new Rectangle(x+16, y, 32, 64);
 
     public Man(TextureRegion man, TextureRegion r1, TextureRegion r2, TextureRegion r3) {
         standing = man;
@@ -85,6 +88,11 @@ public class Man {
             jumping = true;
             going_up = true;
         }
+    }
+
+    public Rectangle getBounds() {
+        collision.setY(y);
+        return collision;
     }
 
     public void setX(float x) {
