@@ -19,13 +19,14 @@ public class Man {
     private TextureRegion current_frame;
 
     //Status of the character
-    private boolean jumping = false;
+    private boolean jumping_left = false;
+    private boolean jumping_right = false;
 
     //Some starting values for the character.
     private float x = 32;
     private float y = 64;
 
-    //Some attributes to handle jumping.
+    //Some attributes to handle jumping_left.
     private boolean going_up = false;
     private float max_y = 200;
 
@@ -53,7 +54,7 @@ public class Man {
             current = 0;
         }
 
-        if(jumping) {
+        if(jumping_left) {
             if(going_up) {
                 y += 5;
 
@@ -61,11 +62,30 @@ public class Man {
                     going_up = false;
                 }
             } else {
-                y -= 5;
+                y -= 2;
 
                 if(y < 64) {
                     y = 64;
-                    jumping = false;
+                    jumping_left = false;
+                    next_change = 0.1f;
+                }
+            }
+        }
+
+        if(jumping_right) {
+            if(going_up) {
+                y += 1.5;
+
+                if(y > max_y-20) {
+                    going_up = false;
+                }
+            } else {
+                y -= 1.5;
+
+                if(y < 64) {
+                    y = 64;
+                    jumping_right = false;
+                    next_change = 0.1f;
                 }
             }
         }
@@ -83,11 +103,20 @@ public class Man {
         }
     }
 
-    public void jump() {
-        if(!jumping) {
-            jumping = true;
-            going_up = true;
+    public void jump(boolean left) {
+        if(left) {
+            if (!jumping_left) {
+                jumping_left = true;
+                going_up = true;
+            }
+        } else {
+            if(!jumping_right) {
+                jumping_right = true;
+                going_up = true;
+            }
         }
+
+        next_change = 0.3f;
     }
 
     public Rectangle getBounds() {

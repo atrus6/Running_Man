@@ -1,6 +1,7 @@
 package org.worldsproject.game.runningman;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -159,8 +160,17 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
 
-        if(Gdx.input.isTouched() && running) {
-            man.jump();
+        if(Gdx.input.isTouched(0) && running) {
+            if(!Gdx.input.isTouched(1)) {
+                if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    man.jump(true);
+                } else {
+                    man.jump(false);
+                }
+
+            } else {
+                man.jump(false);
+            }
         }
 
         total_time += delta;
