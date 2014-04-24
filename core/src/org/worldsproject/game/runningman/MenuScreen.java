@@ -83,12 +83,24 @@ public class MenuScreen implements Screen {
         table.debug();
         table.left();
 
+        final TextButton credits = new TextButton("Credits", skin);
+
+
+
         VerticalGroup vg = new VerticalGroup();
         vg.addActor(new TextButton("Highscores", skin));
         vg.space(50);
-        vg.addActor(new TextButton("Credits", skin));
+        vg.addActor(credits);
 
         table.add(vg);
+
+        credits.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new CreditsScreen(game));
+                dispose();
+            }
+        });
     }
 
     @Override
